@@ -1,0 +1,2253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arewa — African Cycle &amp; Wellness</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@1,9..144,300;1,9..144,400;1,9..144,600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --blush: #F8B4C8;
+    --rose: #E8728A;
+    --deep-rose: #C94B6B;
+    --plum: #7B4F6E;
+    --soft-plum: #A87090;
+    --peach: #FFDBC8;
+    --peach-mid: #F5A882;
+    --cream: #FFF5F0;
+    --white: #FFFFFF;
+    --text-dark: #2D1B26;
+    --text-mid: #6B4557;
+    --text-light: #A87890;
+    --grad1: linear-gradient(135deg, #F8B4C8 0%, #E8728A 50%, #C94B6B 100%);
+    --grad2: linear-gradient(135deg, #FFDBC8 0%, #F5A882 100%);
+    --grad3: linear-gradient(160deg, #fff0f5 0%, #ffe4f0 40%, #ffd6e8 100%);
+    --shadow-soft: 0 4px 24px rgba(201,75,107,0.12);
+    --shadow-card: 0 2px 16px rgba(123,79,110,0.10);
+    --radius: 20px;
+    --radius-sm: 12px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    background: #f0e0e8;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    font-family: 'DM Sans', sans-serif;
+    padding: 24px 0 60px;
+  }
+
+  /* ---- PHONE FRAME ---- */
+  .phone {
+    width: 390px;
+    min-height: 844px;
+    background: var(--white);
+    border-radius: 48px;
+    overflow: hidden;
+    box-shadow: 0 32px 80px rgba(100,30,60,0.22), 0 2px 8px rgba(0,0,0,0.08);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ---- STATUS BAR ---- */
+  .status-bar {
+    background: transparent;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 28px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-dark);
+    height: 54px;
+    position: relative;
+    z-index: 10;
+    flex-shrink: 0;
+  }
+  .status-bar .notch {
+    width: 126px; height: 37px;
+    background: var(--text-dark);
+    border-radius: 20px;
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 11;
+  }
+  /* time and icons sit at the same vertical level as the notch sides */
+  .status-time {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    line-height: 1;
+    padding-top: 2px;
+  }
+  .status-icons {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    padding-top: 2px;
+  }
+
+  /* ---- SCREEN CONTAINER ---- */
+  .screen {
+    display: none;
+    flex-direction: column;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    /* enough room for bottom nav + home indicator */
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 34px));
+  }
+  .screen::-webkit-scrollbar { display: none; }
+  .screen.active { display: flex; }
+
+  /* ---- BOTTOM NAV ---- */
+  .bottom-nav {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    /* nav items area + home indicator safe zone */
+    padding-bottom: env(safe-area-inset-bottom, 20px);
+    padding-top: 8px;
+    height: auto;
+    min-height: 64px;
+    background: var(--white);
+    border-top: 1px solid #f5e6ee;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    z-index: 100;
+    box-shadow: 0 -4px 20px rgba(201,75,107,0.06);
+  }
+  .nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 8px 12px;
+    cursor: pointer;
+    min-width: 48px;
+    border-radius: 14px;
+    transition: background 0.2s;
+  }
+  .nav-item:active { background: #fff0f5; }
+  .nav-item svg { width: 22px; height: 22px; }
+  .nav-item span { font-size: 10px; font-weight: 500; color: var(--text-light); }
+  .nav-item.active span { color: var(--deep-rose); }
+  .nav-item.active svg { color: var(--deep-rose); }
+
+  /* ---- SHARED COMPONENTS ---- */
+  .screen-header {
+    padding: 20px 24px 16px;
+  }
+  .screen-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    color: var(--text-dark);
+    font-weight: 700;
+  }
+  .screen-subtitle { font-size: 13px; color: var(--text-light); margin-top: 2px; }
+
+  .card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 20px;
+    box-shadow: var(--shadow-card);
+    margin: 0 16px 14px;
+  }
+  .card-gradient {
+    background: var(--grad1);
+    border-radius: var(--radius);
+    padding: 22px;
+    margin: 0 16px 14px;
+    color: white;
+  }
+  .pill {
+    display: inline-block;
+    background: #fff0f5;
+    color: var(--deep-rose);
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .pill.active { background: var(--grad1); color: white; }
+  .btn-primary {
+    background: var(--grad1);
+    color: white;
+    border: none;
+    border-radius: 100px;
+    padding: 16px 32px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    box-shadow: 0 6px 20px rgba(201,75,107,0.30);
+    transition: transform 0.15s;
+  }
+  .btn-primary:active { transform: scale(0.97); }
+  .btn-outline {
+    background: transparent;
+    color: var(--deep-rose);
+    border: 2px solid var(--blush);
+    border-radius: 100px;
+    padding: 14px 32px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+  }
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    padding: 0 24px;
+    margin-bottom: 10px;
+  }
+
+  /* ============================
+     SCREEN 1 — ONBOARDING
+  ============================*/
+  #onboarding {
+    background: var(--grad3);
+  }
+  .onboard-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px 28px 30px;
+    gap: 0;
+    flex: 1;
+  }
+  .onboard-logo {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 48px;
+    color: var(--deep-rose);
+    font-weight: 400;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+  .onboard-logo span { color: var(--deep-rose); font-style: italic; }
+  .onboard-tagline {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--soft-plum);
+    margin-bottom: 20px;
+    text-align: center;
+    letter-spacing: 0.2px;
+    line-height: 1.7;
+  }
+
+  .onboard-step {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .onboard-step.active { display: flex; }
+  .onboard-step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--text-dark);
+    text-align: center;
+    line-height: 1.4;
+    margin-bottom: 6px;
+  }
+  .onboard-step-sub { font-size: 13px; color: var(--text-light); text-align: center; margin-bottom: 8px; }
+  .input-field {
+    background: white;
+    border: 2px solid #f0dae5;
+    border-radius: 14px;
+    padding: 14px 18px;
+    font-size: 15px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-dark);
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .input-field:focus { border-color: var(--rose); }
+  .step-dots {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin: 20px 0 10px;
+  }
+  .step-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #f0dae5;
+    transition: all 0.2s;
+  }
+  .step-dot.active {
+    background: var(--deep-rose);
+    width: 24px;
+    border-radius: 4px;
+  }
+  .option-chips { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+  .chip {
+    padding: 10px 18px;
+    border-radius: 100px;
+    border: 2px solid #f0dae5;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-mid);
+    cursor: pointer;
+    background: white;
+    transition: all 0.2s;
+  }
+  .chip.selected {
+    border-color: var(--rose);
+    background: #fff0f5;
+    color: var(--deep-rose);
+  }
+  .onboard-illustration {
+    font-size: 72px;
+    text-align: center;
+    margin-bottom: 16px;
+    line-height: 1;
+  }
+
+  /* ============================
+     SCREEN 2 — HOME DASHBOARD
+  ============================*/
+  .home-header {
+    background: var(--grad3);
+    padding: 20px 24px 28px;
+  }
+  .home-greeting { font-size: 13px; color: var(--text-light); margin-bottom: 2px; }
+  .home-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: var(--text-dark);
+    font-weight: 700;
+  }
+  .cycle-ring-card {
+    background: white;
+    border-radius: 24px;
+    margin: -16px 16px 0;
+    padding: 20px;
+    box-shadow: var(--shadow-soft);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .cycle-ring {
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    background: conic-gradient(var(--rose) 0deg 130deg, #f5e6ee 130deg 360deg);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .cycle-ring-inner {
+    width: 68px; height: 68px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .cycle-day { font-size: 24px; font-weight: 700; color: var(--deep-rose); line-height: 1; }
+  .cycle-day-label { font-size: 9px; color: var(--text-light); font-weight: 600; }
+  .cycle-info h3 { font-size: 16px; font-weight: 600; color: var(--text-dark); }
+  .cycle-info p { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+  .cycle-phase-tag {
+    display: inline-block;
+    background: #fff0f5;
+    color: var(--deep-rose);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 100px;
+    margin-top: 8px;
+  }
+  .quick-stats {
+    display: flex;
+    gap: 10px;
+    padding: 16px 16px 0;
+  }
+  .stat-mini {
+    flex: 1;
+    background: white;
+    border-radius: 16px;
+    padding: 14px 12px;
+    text-align: center;
+    box-shadow: var(--shadow-card);
+  }
+  .stat-mini .emoji { font-size: 20px; }
+  .stat-mini .val { font-size: 16px; font-weight: 700; color: var(--text-dark); }
+  .stat-mini .lbl { font-size: 10px; color: var(--text-light); }
+  .tomi-banner {
+    margin: 16px 16px 0;
+    background: linear-gradient(135deg, #7B4F6E 0%, #C94B6B 100%);
+    border-radius: 20px;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+  }
+  .tomi-avatar {
+    width: 44px; height: 44px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .tomi-banner-text h4 { color: white; font-size: 14px; font-weight: 600; }
+  .tomi-banner-text p { color: rgba(255,255,255,0.8); font-size: 12px; margin-top: 2px; }
+  .insight-scroll {
+    display: flex;
+    gap: 12px;
+    padding: 16px 16px 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .insight-scroll::-webkit-scrollbar { display: none; }
+  .insight-card {
+    background: white;
+    border-radius: 16px;
+    padding: 14px;
+    min-width: 140px;
+    box-shadow: var(--shadow-card);
+    flex-shrink: 0;
+  }
+  .insight-card .emoji { font-size: 22px; margin-bottom: 6px; }
+  .insight-card p { font-size: 12px; color: var(--text-mid); line-height: 1.4; }
+
+  /* ============================
+     SCREEN 3 — CYCLE CALENDAR
+  ============================*/
+  .cal-header { text-align: center; padding: 16px 24px 10px; }
+  .cal-month {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+  .cal-nav { width: 32px; height: 32px; background: #fff0f5; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; color: var(--deep-rose); }
+  .cal-grid { padding: 8px 16px; }
+  .cal-days-header { display: grid; grid-template-columns: repeat(7,1fr); text-align: center; margin-bottom: 8px; }
+  .cal-days-header span { font-size: 11px; font-weight: 700; color: var(--text-light); }
+  .cal-dates { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; }
+  .cal-date {
+    aspect-ratio: 1;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-dark);
+    cursor: pointer;
+    position: relative;
+  }
+  .cal-date.period { background: var(--deep-rose); color: white; }
+  .cal-date.fertile { background: #FFF0A0; color: #7a6000; }
+  .cal-date.ovulation { background: #C0F0D0; color: #1a6030; }
+  .cal-date.predicted { border: 2px dashed var(--blush); color: var(--deep-rose); }
+  .cal-date.today { font-weight: 700; box-shadow: 0 0 0 2px var(--rose); }
+  .cal-legend { display: flex; flex-wrap: wrap; gap: 10px; padding: 8px 16px 16px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-mid); }
+  .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+  .cycle-log-prompt {
+    margin: 0 16px;
+    background: var(--grad1);
+    border-radius: 18px;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+  }
+  .cycle-log-prompt p { color: white; font-size: 14px; font-weight: 600; }
+  .cycle-log-prompt span { font-size: 22px; }
+
+  /* ============================
+     SCREEN 4 — SYMPTOM TRACKER
+  ============================*/
+  .mood-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 0 16px; margin-bottom: 16px; }
+  .mood-item {
+    background: white;
+    border-radius: 16px;
+    padding: 14px 8px;
+    text-align: center;
+    box-shadow: var(--shadow-card);
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .mood-item.selected { border-color: var(--rose); background: #fff0f5; }
+  .mood-item .emoji { font-size: 26px; }
+  .mood-item span { font-size: 10px; color: var(--text-mid); display: block; margin-top: 4px; }
+  .symptom-chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 16px; margin-bottom: 16px; }
+  .sym-chip {
+    background: white;
+    border: 2px solid #f0dae5;
+    border-radius: 100px;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .sym-chip.active { background: #fff0f5; border-color: var(--rose); color: var(--deep-rose); }
+  .flow-selector { padding: 0 16px; margin-bottom: 16px; }
+  .flow-selector label { font-size: 13px; font-weight: 600; color: var(--text-dark); display: block; margin-bottom: 10px; }
+  .flow-dots { display: flex; gap: 10px; align-items: flex-end; }
+  .flow-dot {
+    border-radius: 100px;
+    background: #f0dae5;
+    cursor: pointer;
+    transition: background 0.2s;
+    display: flex; align-items: flex-end; justify-content: center;
+    padding: 4px 6px 2px;
+    font-size: 10px;
+    color: var(--text-light);
+    font-weight: 600;
+  }
+  .flow-dot.active { background: var(--rose); color: white; }
+  .fd1 { width: 36px; height: 28px; }
+  .fd2 { width: 40px; height: 40px; }
+  .fd3 { width: 44px; height: 52px; }
+  .fd4 { width: 48px; height: 64px; }
+  .herbal-section { margin: 0 16px; }
+  .herbal-section h4 { font-size: 14px; font-weight: 600; color: var(--text-dark); margin-bottom: 10px; }
+  .herbal-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+  .herbal-tag {
+    background: linear-gradient(135deg, #fff0f5, #ffe8f0);
+    border: 1px solid #f5ccd9;
+    border-radius: 100px;
+    padding: 7px 12px;
+    font-size: 12px;
+    color: var(--soft-plum);
+    cursor: pointer;
+  }
+
+  /* ============================
+     SCREEN 5 — NUTRITION
+  ============================*/
+  .phase-tabs { display: flex; gap: 8px; padding: 0 16px 16px; overflow-x: auto; scrollbar-width: none; }
+  .phase-tabs::-webkit-scrollbar { display: none; }
+  .phase-tab {
+    background: white;
+    border: 2px solid #f0dae5;
+    border-radius: 100px;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-mid);
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .phase-tab.active { background: var(--grad1); border-color: transparent; color: white; }
+  .country-section { margin: 0 16px 16px; }
+  .country-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 0 8px;
+    border-bottom: 1px solid #f5e6ee;
+    margin-bottom: 10px;
+  }
+  .country-flag { font-size: 22px; }
+  .country-name { font-size: 15px; font-weight: 700; color: var(--text-dark); }
+  .food-list { display: flex; flex-direction: column; gap: 8px; }
+  .food-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: white;
+    border-radius: 14px;
+    padding: 12px 14px;
+    box-shadow: var(--shadow-card);
+  }
+  .food-emoji { font-size: 24px; }
+  .food-info h4 { font-size: 13px; font-weight: 600; color: var(--text-dark); }
+  .food-info p { font-size: 11px; color: var(--text-light); margin-top: 1px; }
+  .food-badge {
+    margin-left: auto;
+    background: #fff0f5;
+    color: var(--deep-rose);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+
+  /* ============================
+     SCREEN 6 — MYTH BUSTER
+  ============================*/
+  .myth-hero {
+    background: var(--grad1);
+    margin: 0 16px 16px;
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    color: white;
+  }
+  .myth-hero h3 { font-family: 'Playfair Display', serif; font-size: 18px; margin-bottom: 6px; }
+  .myth-hero p { font-size: 12px; opacity: 0.9; }
+  .myth-filters { display: flex; gap: 8px; padding: 0 16px 12px; overflow-x: auto; scrollbar-width: none; }
+  .myth-filters::-webkit-scrollbar { display: none; }
+  .myth-filter { flex-shrink: 0; padding: 7px 14px; border-radius: 100px; border: 2px solid #f0dae5; font-size: 12px; font-weight: 600; color: var(--text-mid); background: white; cursor: pointer; }
+  .myth-filter.active { background: var(--grad1); border-color: transparent; color: white; }
+  .myth-card {
+    margin: 0 16px 12px;
+    background: white;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+  }
+  .myth-myth {
+    background: #fff5f8;
+    padding: 14px 16px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .myth-myth .icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+  .myth-myth p { font-size: 13px; font-weight: 600; color: var(--text-dark); line-height: 1.4; }
+  .myth-truth { padding: 14px 16px; }
+  .myth-truth-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; color: var(--deep-rose); text-transform: uppercase; margin-bottom: 4px; }
+  .myth-truth p { font-size: 12px; color: var(--text-mid); line-height: 1.5; }
+  .myth-source { font-size: 10px; color: var(--text-light); margin-top: 6px; }
+
+  /* ============================
+     SCREEN 7 — COMMUNITY
+  ============================*/
+  .lang-toggle {
+    display: flex;
+    background: #f5e6ee;
+    border-radius: 12px;
+    padding: 4px;
+    margin: 0 16px 16px;
+  }
+  .lang-btn {
+    flex: 1;
+    padding: 8px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .lang-btn.active { background: white; color: var(--deep-rose); box-shadow: var(--shadow-card); }
+  .comm-categories { display: flex; gap: 8px; padding: 0 16px 12px; overflow-x: auto; scrollbar-width: none; }
+  .comm-categories::-webkit-scrollbar { display: none; }
+  .comm-cat { flex-shrink: 0; padding: 7px 14px; border-radius: 100px; border: 2px solid #f0dae5; font-size: 12px; font-weight: 500; color: var(--text-mid); background: white; cursor: pointer; }
+  .comm-cat.active { background: #fff0f5; border-color: var(--rose); color: var(--deep-rose); }
+  .post-card {
+    margin: 0 16px 14px;
+    background: white;
+    border-radius: 18px;
+    padding: 16px;
+    box-shadow: var(--shadow-card);
+  }
+  .post-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .post-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--grad1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    color: white;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .post-meta h4 { font-size: 13px; font-weight: 600; color: var(--text-dark); }
+  .post-meta span { font-size: 11px; color: var(--text-light); }
+  .post-badge {
+    margin-left: auto;
+    background: #fff0f5;
+    color: var(--deep-rose);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+  .post-body { font-size: 13px; color: var(--text-mid); line-height: 1.5; margin-bottom: 12px; }
+  .post-actions { display: flex; gap: 16px; }
+  .post-action { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--text-light); cursor: pointer; }
+  .post-action span { font-size: 15px; }
+
+  /* ============================
+     SCREEN 8 — AUNTY TOMI
+  ============================*/
+  .tomi-header {
+    background: linear-gradient(135deg, #7B4F6E 0%, #C94B6B 100%);
+    padding: 16px 20px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .tomi-big-avatar {
+    width: 54px; height: 54px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+  }
+  .tomi-header-text h2 { color: white; font-family: 'Playfair Display', serif; font-size: 20px; }
+  .tomi-header-text p { color: rgba(255,255,255,0.8); font-size: 12px; margin-top: 2px; }
+  .tomi-disclaimer {
+    background: #fff8f0;
+    border-left: 3px solid var(--peach-mid);
+    margin: 12px 16px;
+    padding: 10px 14px;
+    border-radius: 0 12px 12px 0;
+    font-size: 11px;
+    color: var(--text-mid);
+    line-height: 1.5;
+  }
+  .chat-area {
+    flex: 1;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .chat-bubble {
+    max-width: 82%;
+    padding: 12px 16px;
+    border-radius: 18px;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .chat-bubble.tomi {
+    background: white;
+    color: var(--text-dark);
+    border-bottom-left-radius: 4px;
+    box-shadow: var(--shadow-card);
+    align-self: flex-start;
+  }
+  .chat-bubble.user {
+    background: var(--grad1);
+    color: white;
+    border-bottom-right-radius: 4px;
+    align-self: flex-end;
+  }
+  .chat-bubble .sender { font-size: 10px; font-weight: 700; color: var(--deep-rose); margin-bottom: 4px; }
+  .quick-replies { display: flex; gap: 8px; padding: 8px 16px; overflow-x: auto; scrollbar-width: none; }
+  .quick-replies::-webkit-scrollbar { display: none; }
+  .qr-chip {
+    flex-shrink: 0;
+    background: white;
+    border: 2px solid #f0dae5;
+    border-radius: 100px;
+    padding: 8px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-mid);
+    cursor: pointer;
+    white-space: nowrap;
+    box-shadow: var(--shadow-card);
+    transition: all 0.2s;
+  }
+  .qr-chip:active { background: #fff0f5; border-color: var(--rose); color: var(--deep-rose); }
+  .chat-input-bar {
+    display: flex;
+    gap: 10px;
+    padding: 12px 16px;
+    background: white;
+    border-top: 1px solid #f5e6ee;
+  }
+  .chat-input {
+    flex: 1;
+    background: #fff5f8;
+    border: 2px solid #f0dae5;
+    border-radius: 24px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-dark);
+    outline: none;
+  }
+  .chat-send {
+    width: 44px; height: 44px;
+    background: var(--grad1);
+    border: none;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(201,75,107,0.3);
+  }
+
+  /* ============================
+     SCREEN 9 — PERIOD INSIGHTS
+  ============================*/
+  .insights-hero {
+    background: var(--grad3);
+    padding: 20px 24px 24px;
+  }
+  .insights-hero h2 { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--text-dark); }
+  .insights-hero p { font-size: 13px; color: var(--text-light); margin-top: 4px; }
+  .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 16px 16px 0; }
+  .stat-card {
+    background: white;
+    border-radius: 18px;
+    padding: 16px;
+    box-shadow: var(--shadow-card);
+  }
+  .stat-card .label { font-size: 11px; color: var(--text-light); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .stat-card .value { font-family: 'Playfair Display', serif; font-size: 26px; color: var(--text-dark); font-weight: 700; }
+  .stat-card .unit { font-size: 12px; color: var(--text-light); }
+  .stat-card .trend { font-size: 11px; color: #2eb067; font-weight: 600; margin-top: 4px; }
+  .phase-bar-section { margin: 16px 16px 0; background: white; border-radius: 18px; padding: 16px; box-shadow: var(--shadow-card); }
+  .phase-bar-section h4 { font-size: 13px; font-weight: 700; color: var(--text-dark); margin-bottom: 12px; }
+  .phase-bar { height: 12px; border-radius: 100px; display: flex; overflow: hidden; gap: 2px; }
+  .phase-seg { height: 100%; border-radius: 4px; }
+  .phase-seg.menstrual { background: var(--deep-rose); flex: 5; }
+  .phase-seg.follicular { background: #f5a882; flex: 7; }
+  .phase-seg.ovulation { background: #4ecb8f; flex: 3; }
+  .phase-seg.luteal { background: var(--plum); flex: 14; }
+  .phase-labels { display: flex; gap: 12px; margin-top: 10px; flex-wrap: wrap; }
+  .phase-label { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--text-mid); }
+  .phase-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .next-events { margin: 16px 16px 0; }
+  .event-row {
+    background: white;
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: var(--shadow-card);
+  }
+  .event-icon {
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .event-icon.period { background: #fff0f5; }
+  .event-icon.fertile { background: #fffde0; }
+  .event-icon.ov { background: #e8f8ee; }
+  .event-info h4 { font-size: 13px; font-weight: 600; color: var(--text-dark); }
+  .event-info p { font-size: 12px; color: var(--text-light); margin-top: 1px; }
+  .event-days { margin-left: auto; font-size: 18px; font-weight: 700; color: var(--deep-rose); }
+  .event-days span { font-size: 10px; color: var(--text-light); font-weight: 400; display: block; text-align: center; }
+
+  /* ============================
+     SCREEN 10 — PCOS/ENDO
+  ============================*/
+  .pcos-hero {
+    background: linear-gradient(135deg, #7B4F6E, #C94B6B);
+    margin: 0 16px 16px;
+    border-radius: 20px;
+    padding: 20px;
+    color: white;
+  }
+  .pcos-hero h3 { font-family: 'Playfair Display', serif; font-size: 18px; margin-bottom: 6px; }
+  .pcos-hero p { font-size: 12px; opacity: 0.85; line-height: 1.5; }
+  .symptom-tracker-grid {
+    padding: 0 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .sym-track-card {
+    background: white;
+    border-radius: 16px;
+    padding: 14px;
+    box-shadow: var(--shadow-card);
+  }
+  .sym-track-card .icon { font-size: 22px; margin-bottom: 6px; }
+  .sym-track-card h4 { font-size: 12px; font-weight: 700; color: var(--text-dark); margin-bottom: 3px; }
+  .sym-track-card p { font-size: 10px; color: var(--text-light); line-height: 1.4; }
+  .sym-track-card .log-btn {
+    margin-top: 8px;
+    background: #fff0f5;
+    color: var(--deep-rose);
+    border: none;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .pain-scale { margin: 0 16px 16px; background: white; border-radius: 18px; padding: 16px; box-shadow: var(--shadow-card); }
+  .pain-scale h4 { font-size: 13px; font-weight: 700; color: var(--text-dark); margin-bottom: 12px; }
+  .pain-dots { display: flex; gap: 8px; }
+  .pain-dot {
+    flex: 1;
+    height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  .pain-dot:nth-child(1) { background: #e8f5ee; color: #2eb067; }
+  .pain-dot:nth-child(2) { background: #fff8e0; color: #b08020; }
+  .pain-dot:nth-child(3) { background: #fff0e0; color: #c06020; }
+  .pain-dot:nth-child(4) { background: #ffe0e0; color: #c03030; }
+  .pain-dot:nth-child(5) { background: #ffd0d0; color: #a01010; }
+  .pain-dot.selected { border-color: var(--deep-rose); box-shadow: 0 0 0 2px rgba(201,75,107,0.2); }
+  .see-doctor-banner {
+    margin: 0 16px 16px;
+    background: #fff5f0;
+    border: 1px solid #f5cca0;
+    border-radius: 16px;
+    padding: 14px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .see-doctor-banner .icon { font-size: 20px; flex-shrink: 0; }
+  .see-doctor-banner p { font-size: 12px; color: var(--text-mid); line-height: 1.5; }
+  .see-doctor-banner strong { color: var(--text-dark); }
+
+  /* ============================
+     SCREEN 11 — FERTILITY
+  ============================*/
+  .fertility-header {
+    background: linear-gradient(135deg, #ffdbc8, #f5a882);
+    padding: 20px 24px 24px;
+  }
+  .fertility-header h2 { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--text-dark); }
+  .fertility-header p { font-size: 13px; color: var(--text-mid); margin-top: 4px; }
+  .fertile-window-card {
+    margin: -16px 16px 16px;
+    background: white;
+    border-radius: 20px;
+    padding: 18px;
+    box-shadow: var(--shadow-soft);
+  }
+  .fertile-window-card h4 { font-size: 14px; font-weight: 700; color: var(--text-dark); margin-bottom: 12px; }
+  .fertile-days { display: flex; gap: 6px; }
+  .fertile-day {
+    flex: 1;
+    background: #f5e6ee;
+    border-radius: 10px;
+    padding: 10px 4px;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-mid);
+  }
+  .fertile-day.peak { background: var(--grad1); color: white; }
+  .fertile-day .day { font-size: 15px; color: var(--text-dark); font-weight: 700; }
+  .fertile-day.peak .day { color: white; }
+  .fertile-day .lbl { font-size: 9px; margin-top: 2px; }
+  .bbt-section { margin: 0 16px 16px; background: white; border-radius: 18px; padding: 16px; box-shadow: var(--shadow-card); }
+  .bbt-section h4 { font-size: 13px; font-weight: 700; color: var(--text-dark); margin-bottom: 12px; }
+  .bbt-chart { height: 80px; position: relative; display: flex; align-items: flex-end; gap: 4px; }
+  .bbt-bar { flex: 1; border-radius: 4px 4px 0 0; background: #f0dae5; position: relative; transition: all 0.2s; }
+  .bbt-bar.peak { background: var(--rose); }
+  .bbt-baseline { position: absolute; bottom: 20px; left: 0; right: 0; height: 1px; background: #ddd; border-top: 1px dashed #ccc; }
+  .fertility-tip {
+    margin: 0 16px 16px;
+    background: #e8f8ee;
+    border-radius: 16px;
+    padding: 14px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .fertility-tip .icon { font-size: 20px; flex-shrink: 0; }
+  .fertility-tip p { font-size: 12px; color: #2a6040; line-height: 1.5; }
+
+  /* ============================
+     SCREEN 12 — EXPORT REPORT
+  ============================*/
+  .export-hero {
+    background: var(--grad3);
+    padding: 20px 24px 24px;
+  }
+  .export-hero h2 { font-family: 'Playfair Display', serif; font-size: 22px; color: var(--text-dark); }
+  .export-hero p { font-size: 13px; color: var(--text-light); margin-top: 4px; }
+  .report-preview {
+    margin: -16px 16px 16px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+  }
+  .report-header-strip {
+    background: var(--grad1);
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .report-header-strip .report-logo { font-family: 'Playfair Display', serif; font-size: 16px; color: white; font-weight: 700; }
+  .report-header-strip .report-date { font-size: 11px; color: rgba(255,255,255,0.8); }
+  .report-section { padding: 14px 18px; border-bottom: 1px solid #f5e6ee; }
+  .report-section:last-child { border-bottom: none; }
+  .report-section h4 { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--deep-rose); margin-bottom: 8px; }
+  .report-row { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-mid); margin-bottom: 4px; }
+  .report-row strong { color: var(--text-dark); }
+  .export-options { margin: 0 16px; display: flex; flex-direction: column; gap: 10px; }
+  .export-btn {
+    background: white;
+    border: 2px solid #f0dae5;
+    border-radius: 16px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .export-btn:active { background: #fff0f5; border-color: var(--rose); }
+  .export-btn .icon { font-size: 22px; }
+  .export-btn .info h4 { font-size: 13px; font-weight: 700; color: var(--text-dark); }
+  .export-btn .info p { font-size: 11px; color: var(--text-light); }
+  .export-btn .arrow { margin-left: auto; color: var(--text-light); font-size: 18px; }
+
+  /* ============================
+     SCREEN 13 — OFFLINE MODE
+  ============================*/
+  .offline-indicator {
+    margin: 0 16px 16px;
+    background: #fff8e0;
+    border: 1px solid #f5d060;
+    border-radius: 16px;
+    padding: 14px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .offline-indicator .icon { font-size: 22px; }
+  .offline-indicator p { font-size: 12px; color: #8b6a00; line-height: 1.5; }
+  .offline-features { padding: 0 16px; }
+  .offline-features h4 { font-size: 14px; font-weight: 700; color: var(--text-dark); margin-bottom: 12px; }
+  .offline-feature-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: white;
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow-card);
+  }
+  .offline-feature-row .icon { font-size: 22px; flex-shrink: 0; }
+  .offline-feature-row .info h4 { font-size: 13px; font-weight: 600; color: var(--text-dark); }
+  .offline-feature-row .info p { font-size: 11px; color: var(--text-light); margin-top: 1px; }
+  .offline-feature-row .status {
+    margin-left: auto;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+  .status.available { background: #e8f8ee; color: #2eb067; }
+  .status.online-only { background: #fff0f5; color: var(--deep-rose); }
+  .sync-btn {
+    margin: 16px 16px 0;
+    background: var(--grad1);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    padding: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    width: calc(100% - 32px);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  /* ============================
+     SCREEN 14 — SETTINGS
+  ============================*/
+  .settings-profile {
+    background: var(--grad3);
+    padding: 20px 24px 28px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .profile-avatar {
+    width: 60px; height: 60px;
+    background: var(--grad1);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    color: white;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  .profile-info h3 { font-family: 'Playfair Display', serif; font-size: 18px; color: var(--text-dark); }
+  .profile-info p { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+  .settings-section { margin: 0 16px 16px; }
+  .settings-section h4 { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-light); margin-bottom: 8px; padding-left: 4px; }
+  .setting-row {
+    background: white;
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+    box-shadow: var(--shadow-card);
+    cursor: pointer;
+  }
+  .setting-row .icon { font-size: 20px; flex-shrink: 0; }
+  .setting-row .info h4 { font-size: 13px; font-weight: 600; color: var(--text-dark); }
+  .setting-row .info p { font-size: 11px; color: var(--text-light); margin-top: 1px; }
+  .setting-row .right { margin-left: auto; }
+  .toggle {
+    width: 44px; height: 24px;
+    background: #f0dae5;
+    border-radius: 100px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .toggle.on { background: var(--rose); }
+  .toggle::after {
+    content: '';
+    position: absolute;
+    width: 18px; height: 18px;
+    background: white;
+    border-radius: 50%;
+    top: 3px; left: 3px;
+    transition: left 0.2s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  }
+  .toggle.on::after { left: 23px; }
+  .select-row { background: #f5e6ee; border-radius: 8px; padding: 4px 10px; font-size: 12px; font-weight: 600; color: var(--deep-rose); }
+
+  /* Nav icon paths */
+  .nav-icon { width: 22px; height: 22px; fill: none; stroke: #c0a0b0; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .nav-item.active .nav-icon { stroke: var(--deep-rose); }
+
+  /* Loading spinner overlay for AI */
+  .ai-loading {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    align-self: flex-start;
+  }
+  .ai-loading.show { display: flex; }
+  .ai-dot {
+    width: 8px; height: 8px;
+    background: var(--rose);
+    border-radius: 50%;
+    animation: bounce 1.2s ease-in-out infinite;
+  }
+  .ai-dot:nth-child(2) { animation-delay: 0.2s; }
+  .ai-dot:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes bounce {
+    0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+    40% { transform: scale(1); opacity: 1; }
+  }
+
+  /* Onboarding full height */
+  #onboarding { min-height: 780px; }
+
+  /* ---- BACK BUTTON ---- */
+  .screen-nav {
+    display: flex;
+    align-items: center;
+    padding: 12px 20px 0;
+    min-height: 44px;
+  }
+  .back-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    min-width: 44px;
+    min-height: 44px;
+    color: var(--deep-rose);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .back-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+  .screen-nav-title {
+    flex: 1;
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-dark);
+    /* offset right to visually center against back button */
+    padding-right: 44px;
+  }
+
+  /* ---- INSIGHT GRID (replaces scroll) ---- */
+  .insight-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding: 0 16px 8px;
+  }
+  .insight-tile {
+    background: white;
+    border-radius: 16px;
+    padding: 14px 12px;
+    box-shadow: var(--shadow-card);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .insight-tile .emoji { font-size: 24px; }
+  .insight-tile p { font-size: 12px; color: var(--text-mid); line-height: 1.4; }
+
+  /* ---- SAFE AREA / APPLE ANDROID COMPLIANCE ---- */
+  /* handled above in .screen and .bottom-nav */
+
+  /* Responsive for smaller screens */
+  @media (max-width: 420px) {
+    .phone { width: 100vw; border-radius: 0; }
+  }
+</style>
+</head>
+<body>
+
+
+
+<div class="phone">
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <span class="status-time">9:41</span>
+    <div class="notch"></div>
+    <div class="status-icons">
+      <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/><rect x="13.5" y="0" width="2.5" height="12" rx="1" opacity=".3"/></svg>
+      <svg width="15" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1.5 8.5C5 5 9.5 3 12 3s7 2 10.5 5.5"/><path d="M5 12c1.8-1.8 4.3-3 7-3s5.2 1.2 7 3"/><path d="M8.5 15.5c1-1 2.3-1.5 3.5-1.5s2.5.5 3.5 1.5"/><circle cx="12" cy="19" r="1" fill="currentColor"/></svg>
+      <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0" y="1" width="22" height="10" rx="2.5" stroke="currentColor" stroke-width="1.5" fill="none"/><rect x="1.5" y="2.5" width="17" height="7" rx="1.5" fill="currentColor"/><path d="M23.5 4v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+
+  <!-- ============================
+       SCREEN 1: ONBOARDING
+  ============================ -->
+  <div id="onboarding" class="screen active">
+    <div class="onboard-wrap">
+      <div class="onboard-logo" id="logoText">Arewa</div>
+      <div class="onboard-tagline">Your body is not a mystery — it's a masterpiece.<br>Welcome to the most important relationship you'll ever have.</div>
+
+      <!-- Step 1 -->
+      <div class="onboard-step active" id="step1">
+        <div class="onboard-illustration">🌺</div>
+        <div class="onboard-step-title">Hey girl! What's your name? 🌸</div>
+        <div class="onboard-step-sub">Let's make this personal for you</div>
+        <input class="input-field" type="text" placeholder="Your first name" id="userName" />
+        <input class="input-field" type="date" placeholder="When did your last period start?" />
+        <div style="font-size:12px;color:var(--text-light);text-align:center;">When did your last period start?</div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="onboard-step" id="step2">
+        <div class="onboard-illustration">📅</div>
+        <div class="onboard-step-title">How long is your usual cycle?</div>
+        <div class="onboard-step-sub">Count from day 1 of one period to the next</div>
+        <div class="option-chips">
+          <div class="chip" onclick="selectChip(this,'cycle')">Less than 21 days</div>
+          <div class="chip selected" onclick="selectChip(this,'cycle')">21–28 days</div>
+          <div class="chip" onclick="selectChip(this,'cycle')">29–35 days</div>
+          <div class="chip" onclick="selectChip(this,'cycle')">Irregular</div>
+          <div class="chip" onclick="selectChip(this,'cycle')">I'm not sure</div>
+        </div>
+        <div style="font-size:13px;font-weight:600;color:var(--text-dark);margin-top:8px;">How long does your period last?</div>
+        <div class="option-chips">
+          <div class="chip" onclick="selectChip(this,'period')">1–3 days</div>
+          <div class="chip selected" onclick="selectChip(this,'period')">4–5 days</div>
+          <div class="chip" onclick="selectChip(this,'period')">6–7 days</div>
+          <div class="chip" onclick="selectChip(this,'period')">More than 7</div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="onboard-step" id="step3">
+        <div class="onboard-illustration">🩺</div>
+        <div class="onboard-step-title">Anything you'd like us to know?</div>
+        <div class="onboard-step-sub">Optional — helps us personalise your experience</div>
+        <div class="option-chips">
+          <div class="chip" onclick="selectChip(this,'condition')">PCOS</div>
+          <div class="chip" onclick="selectChip(this,'condition')">Endometriosis</div>
+          <div class="chip" onclick="selectChip(this,'condition')">Fibroids</div>
+          <div class="chip" onclick="selectChip(this,'condition')">Anaemia</div>
+          <div class="chip" onclick="selectChip(this,'condition')">Thyroid issues</div>
+          <div class="chip" onclick="selectChip(this,'condition')">Prefer not to say</div>
+          <div class="chip" onclick="selectChip(this,'condition')">None of the above</div>
+        </div>
+        <div style="font-size:13px;font-weight:600;color:var(--text-dark);margin-top:8px;">What are you here for?</div>
+        <div class="option-chips">
+          <div class="chip selected" onclick="selectChip(this,'goal')">Track my cycle</div>
+          <div class="chip" onclick="selectChip(this,'goal')">Understand my body</div>
+          <div class="chip" onclick="selectChip(this,'goal')">Plan a pregnancy</div>
+          <div class="chip" onclick="selectChip(this,'goal')">Avoid pregnancy</div>
+          <div class="chip" onclick="selectChip(this,'goal')">Manage symptoms</div>
+        </div>
+      </div>
+
+      <!-- Dots -->
+      <div class="step-dots">
+        <div class="step-dot active" id="dot1"></div>
+        <div class="step-dot" id="dot2"></div>
+        <div class="step-dot" id="dot3"></div>
+      </div>
+
+      <div style="width:100%;display:flex;flex-direction:column;gap:10px;margin-top:8px;">
+        <button class="btn-primary" id="nextBtn" onclick="nextStep()">Continue →</button>
+        <button class="btn-outline" id="skipBtn" onclick="showScreen('home')">Skip for now</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================
+       SCREEN 2: HOME
+  ============================ -->
+  <div id="home" class="screen">
+    <div class="home-header">
+      <div class="home-greeting">Good morning ☀️</div>
+      <div class="home-name">Chidera 🌸</div>
+    </div>
+    <div class="cycle-ring-card">
+      <div class="cycle-ring">
+        <div class="cycle-ring-inner">
+          <div class="cycle-day">12</div>
+          <div class="cycle-day-label">DAY</div>
+        </div>
+      </div>
+      <div class="cycle-info">
+        <h3>Follicular Phase</h3>
+        <p>Next period in <strong>16 days</strong></p>
+        <div class="cycle-phase-tag">✨ High energy week</div>
+      </div>
+    </div>
+    <div class="quick-stats">
+      <div class="stat-mini"><div class="emoji">💧</div><div class="val">4</div><div class="lbl">Glasses water</div></div>
+      <div class="stat-mini"><div class="emoji">😴</div><div class="val">7h</div><div class="lbl">Sleep last night</div></div>
+      <div class="stat-mini"><div class="emoji">🌡️</div><div class="val">36.5</div><div class="lbl">Temp °C</div></div>
+    </div>
+    <div style="margin-top:16px;"></div>
+    <div class="tomi-banner" onclick="showScreen('tomi')">
+      <div class="tomi-avatar" style="font-size:24px;">💕</div>
+      <div class="tomi-banner-text">
+        <h4>Tomi has a tip for you ✨</h4>
+        <p>"Your energy is peaking right now — perfect time for a workout!" 🏃🏾‍♀️</p>
+      </div>
+      <div style="margin-left:auto;color:rgba(255,255,255,0.7);font-size:18px;">›</div>
+    </div>
+    <div style="margin-top:16px;"></div>
+    <div class="section-label">Today's Insights</div>
+    <div class="insight-grid">
+      <div class="insight-tile"><div class="emoji">🥬</div><p>Eat leafy greens — iron support for your cycle today</p></div>
+      <div class="insight-tile"><div class="emoji">🏃🏾‍♀️</div><p>Great day for a workout — oestrogen is rising</p></div>
+      <div class="insight-tile"><div class="emoji">💊</div><p>Take your folic acid if you're tracking fertility</p></div>
+      <div class="insight-tile"><div class="emoji">🌙</div><p>Ovulation window opens in 2 days — fertility rising</p></div>
+    </div>
+    <div style="height:8px;"></div>
+  </div>
+
+  <!-- ============================
+       SCREEN 3: CALENDAR
+  ============================ -->
+  <div id="calendar" class="screen">
+    <div style="background:var(--grad3);">
+      <div class="screen-nav"><button class="back-btn" onclick="showScreen('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>Back</button><div class="screen-nav-title">Calendar</div></div>
+      <div class="screen-header" style="padding-top:4px;"><div class="screen-subtitle">March 2026</div></div>
+    </div>
+    <div class="cal-grid">
+      <div class="cal-days-header">
+        <span>Sun</span><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span>
+      </div>
+      <div class="cal-dates">
+        <div class="cal-date"></div>
+        <div class="cal-date"></div>
+        <div class="cal-date"></div>
+        <div class="cal-date"></div>
+        <div class="cal-date"></div>
+        <div class="cal-date"></div>
+        <div class="cal-date">1</div>
+        <div class="cal-date period">2</div>
+        <div class="cal-date period">3</div>
+        <div class="cal-date period">4</div>
+        <div class="cal-date period">5</div>
+        <div class="cal-date period">6</div>
+        <div class="cal-date">7</div>
+        <div class="cal-date">8</div>
+        <div class="cal-date">9</div>
+        <div class="cal-date">10</div>
+        <div class="cal-date">11</div>
+        <div class="cal-date today">12</div>
+        <div class="cal-date">13</div>
+        <div class="cal-date">14</div>
+        <div class="cal-date fertile">15</div>
+        <div class="cal-date fertile">16</div>
+        <div class="cal-date ovulation">17</div>
+        <div class="cal-date fertile">18</div>
+        <div class="cal-date fertile">19</div>
+        <div class="cal-date">20</div>
+        <div class="cal-date">21</div>
+        <div class="cal-date">22</div>
+        <div class="cal-date">23</div>
+        <div class="cal-date">24</div>
+        <div class="cal-date">25</div>
+        <div class="cal-date">26</div>
+        <div class="cal-date">27</div>
+        <div class="cal-date predicted">28</div>
+        <div class="cal-date predicted">29</div>
+        <div class="cal-date predicted">30</div>
+        <div class="cal-date predicted">31</div>
+      </div>
+    </div>
+    <div class="cal-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--deep-rose)"></div>Period</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#f5d020"></div>Fertile</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#4ecb8f"></div>Ovulation</div>
+      <div class="legend-item"><div class="legend-dot" style="background:transparent;border:2px dashed var(--blush)"></div>Predicted</div>
+    </div>
+    <div class="cycle-log-prompt" onclick="">
+      <p>Log today's symptoms</p>
+      <span>✏️</span>
+    </div>
+    <div style="height:16px;"></div>
+  </div>
+
+  <!-- ============================
+       SCREEN 4: SYMPTOM TRACKER
+  ============================ -->
+  <div id="tracker" class="screen">
+    <div style="background:var(--grad3);">
+      <div class="screen-nav"><button class="back-btn" onclick="showScreen('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>Back</button><div class="screen-nav-title">How are you feeling?</div></div>
+      <div class="screen-header" style="padding-top:4px;"><div class="screen-subtitle">Day 12 · Follicular Phase</div></div>
+    </div>
+    <div style="padding:16px 0 8px;"></div>
+    <div class="section-label">Your Mood Today</div>
+    <div class="mood-grid">
+      <div class="mood-item" onclick="toggleMood(this)"><div class="emoji">😊</div><span>Happy</span></div>
+      <div class="mood-item selected" onclick="toggleMood(this)"><div class="emoji">😌</div><span>Calm</span></div>
+      <div class="mood-item" onclick="toggleMood(this)"><div class="emoji">😩</div><span>Tired</span></div>
+      <div class="mood-item" onclick="toggleMood(this)"><div class="emoji">😤</div><span>Irritable</span></div>
+      <div class="mood-item" onclick="toggleMood(this)"><div class="emoji">😢</div><span>Sad</span></div>
+      <div class="mood-item" onclick="toggleMood(this)"><div class="emoji">😬</div><span>Anxious</span></div>
+      <div class="mood-item" onclick="toggleMood(this)"><div class="emoji">🤩</div><span>Energised</span></div>
+      <div class="mood-item" onclick="toggleMood(this)"><div class="emoji">😶</div><span>Meh</span></div>
+    </div>
+    <div class="section-label">Symptoms</div>
+    <div class="symptom-chips">
+      <div class="sym-chip active" onclick="toggleChip(this)">Cramps 🌀</div>
+      <div class="sym-chip" onclick="toggleChip(this)">Bloating</div>
+      <div class="sym-chip" onclick="toggleChip(this)">Headache</div>
+      <div class="sym-chip" onclick="toggleChip(this)">Back pain</div>
+      <div class="sym-chip" onclick="toggleChip(this)">Breast tenderness</div>
+      <div class="sym-chip" onclick="toggleChip(this)">Nausea</div>
+      <div class="sym-chip" onclick="toggleChip(this)">Acne</div>
+      <div class="sym-chip" onclick="toggleChip(this)">Spotting</div>
+      <div class="sym-chip" onclick="toggleChip(this)">Fatigue</div>
+      <div class="sym-chip active" onclick="toggleChip(this)">Food cravings 🍫</div>
+      <div class="sym-chip" onclick="toggleChip(this)">Hot flashes</div>
+      <div class="sym-chip" onclick="toggleChip(this)">Insomnia</div>
+    </div>
+    <div class="flow-selector">
+      <label>Flow intensity today</label>
+      <div class="flow-dots">
+        <div class="flow-dot fd1" onclick="selectFlow(this)">Light</div>
+        <div class="flow-dot fd2 active" onclick="selectFlow(this)">Medium</div>
+        <div class="flow-dot fd3" onclick="selectFlow(this)">Heavy</div>
+        <div class="flow-dot fd4" onclick="selectFlow(this)">Very Heavy</div>
+      </div>
+    </div>
+    <div class="herbal-section">
+      <h4>🌿 Herbal remedies used today</h4>
+      <div class="herbal-tags">
+        <div class="herbal-tag" onclick="toggleHerbal(this)">🫚 Ginger tea</div>
+        <div class="herbal-tag" onclick="toggleHerbal(this)">🌿 Moringa</div>
+        <div class="herbal-tag" onclick="toggleHerbal(this)">🌸 Hibiscus (Zobo)</div>
+        <div class="herbal-tag" onclick="toggleHerbal(this)">🍃 Bitter leaf</div>
+        <div class="herbal-tag" onclick="toggleHerbal(this)">🌱 Scent leaf</div>
+        <div class="herbal-tag" onclick="toggleHerbal(this)">+ Add remedy</div>
+      </div>
+    </div>
+    <div style="padding:16px;">
+      <button class="btn-primary">Save Today's Log ✓</button>
+    </div>
+  </div>
+
+  <!-- ============================
+       SCREEN 5: NUTRITION
+  ============================ -->
+  <div id="nutrition" class="screen">
+    <div style="background:var(--grad3);">
+      <div class="screen-nav"><button class="back-btn" onclick="showScreen('more')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>Back</button><div class="screen-nav-title">Nutrition for Flow</div></div>
+      <div class="screen-header" style="padding-top:4px;"><div class="screen-subtitle">Foods that support your cycle</div></div>
+    </div>
+    <div class="phase-tabs">
+      <div class="phase-tab active" onclick="selectTab(this)">🩸 Menstrual</div>
+      <div class="phase-tab" onclick="selectTab(this)">🌱 Follicular</div>
+      <div class="phase-tab" onclick="selectTab(this)">🥚 Ovulation</div>
+      <div class="phase-tab" onclick="selectTab(this)">🌙 Luteal</div>
+    </div>
+
+    <!-- Nigeria -->
+    <div class="country-section">
+      <div class="country-header"><div class="country-flag">🇳🇬</div><div class="country-name">Nigeria</div></div>
+      <div class="food-list">
+        <div class="food-item"><div class="food-emoji">🌿</div><div class="food-info"><h4>Moringa leaf soup</h4><p>High in iron — replenishes blood loss</p></div><div class="food-badge">Iron ★★★</div></div>
+        <div class="food-item"><div class="food-emoji">🍖</div><div class="food-info"><h4>Ofe onugbu (bitter leaf soup)</h4><p>Anti-inflammatory, supports uterine health</p></div><div class="food-badge">Anti-inflam</div></div>
+        <div class="food-item"><div class="food-emoji">🫚</div><div class="food-info"><h4>Zobo drink (hibiscus)</h4><p>Rich in vitamin C — boosts iron absorption</p></div><div class="food-badge">Vit C ★★</div></div>
+      </div>
+    </div>
+
+    <!-- Ghana -->
+    <div class="country-section">
+      <div class="country-header"><div class="country-flag">🇬🇭</div><div class="country-name">Ghana</div></div>
+      <div class="food-list">
+        <div class="food-item"><div class="food-emoji">🥜</div><div class="food-info"><h4>Groundnut soup</h4><p>Magnesium — reduces cramps and PMS</p></div><div class="food-badge">Magnesium</div></div>
+        <div class="food-item"><div class="food-emoji">🍠</div><div class="food-info"><h4>Kontomire (cocoyam leaves)</h4><p>Iron + folate rich — cycle support</p></div><div class="food-badge">Folate ★★</div></div>
+      </div>
+    </div>
+
+    <!-- Kenya -->
+    <div class="country-section">
+      <div class="country-header"><div class="country-flag">🇰🇪</div><div class="country-name">Kenya</div></div>
+      <div class="food-list">
+        <div class="food-item"><div class="food-emoji">🌽</div><div class="food-info"><h4>Ugali with sukuma wiki</h4><p>Kale provides iron + calcium for cramp relief</p></div><div class="food-badge">Iron + Ca</div></div>
+        <div class="food-item"><div class="food-emoji">🥛</div><div class="food-info"><h4>Mursik (fermented milk)</h4><p>Probiotic — supports gut health during period</p></div><div class="food-badge">Probiotic</div></div>
+      </div>
+    </div>
+
+    <!-- Ethiopia -->
+    <div class="country-section">
+      <div class="country-header"><div class="country-flag">🇪🇹</div><div class="country-name">Ethiopia</div></div>
+      <div class="food-list">
+        <div class="food-item"><div class="food-emoji">🫓</div><div class="food-info"><h4>Injera with misir wot</h4><p>Red lentils — plant-based iron + protein</p></div><div class="food-badge">Iron ★★</div></div>
+        <div class="food-item"><div class="food-emoji">☕</div><div class="food-info"><h4>Ethiopian coffee (moderate)</h4><p>Limit during period — can worsen cramps</p></div><div class="food-badge">⚠️ Limit</div></div>
+      </div>
+    </div>
+
+    <!-- Senegal -->
+    <div class="country-section">
+      <div class="country-header"><div class="country-flag">🇸🇳</div><div class="country-name">Senegal</div></div>
+      <div class="food-list">
+        <div class="food-item"><div class="food-emoji">🐟</div><div class="food-info"><h4>Thiéboudienne (rice & fish)</h4><p>Omega-3 from fish — anti-inflammatory</p></div><div class="food-badge">Omega-3</div></div>
+        <div class="food-item"><div class="food-emoji">🧃</div><div class="food-info"><h4>Bissap (hibiscus drink)</h4><p>Same as zobo — boosts iron absorption</p></div><div class="food-badge">Vit C ★★</div></div>
+      </div>
+    </div>
+
+    <!-- South Africa -->
+    <div class="country-section">
+      <div class="country-header"><div class="country-flag">🇿🇦</div><div class="country-name">South Africa</div></div>
+      <div class="food-list">
+        <div class="food-item"><div class="food-emoji">🌿</div><div class="food-info"><h4>Rooibos tea</h4><p>Caffeine-free antioxidant — calming for PMS</p></div><div class="food-badge">Antioxidant</div></div>
+        <div class="food-item"><div class="food-emoji">🥣</div><div class="food-info"><h4>Samp and beans (umngqusho)</h4><p>Protein + iron — sustained energy on period days</p></div><div class="food-badge">Iron + Protein</div></div>
+      </div>
+    </div>
+    <div style="height:8px;"></div>
+  </div>
+
+  <!-- ============================
+       SCREEN 6: MYTH BUSTER
+  ============================ -->
+  <div id="myths" class="screen">
+    <div style="background:var(--grad3);">
+      <div class="screen-nav"><button class="back-btn" onclick="showScreen('more')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>Back</button><div class="screen-nav-title">Myth-Buster 💥</div></div>
+      <div class="screen-header" style="padding-top:4px;"><div class="screen-subtitle">Science vs African period myths</div></div>
+    </div>
+    <div class="myth-hero">
+      <h3>38 myths debunked 🔬</h3>
+      <p>Real science, from Nigerian doctors and international research</p>
+    </div>
+    <div class="myth-filters">
+      <div class="myth-filter active">All</div>
+      <div class="myth-filter">Food & Diet</div>
+      <div class="myth-filter">Sex & Relationships</div>
+      <div class="myth-filter">Religion</div>
+      <div class="myth-filter">Traditional</div>
+      <div class="myth-filter">PCOS</div>
+      <div class="myth-filter">Fertility</div>
+    </div>
+
+    <div class="myth-card">
+      <div class="myth-myth"><div class="icon">🚫</div><p>"You should not cook or touch food during your period — it will spoil"</p></div>
+      <div class="myth-truth"><div class="myth-truth-label">✅ The Truth</div><p>Menstruation has no effect on food preservation. This myth has no scientific basis. Women on their period can cook, garden, and do all normal activities safely.</p><div class="myth-source">Source: WHO Women's Health Guidelines</div></div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-myth"><div class="icon">🚫</div><p>"Bathing or washing hair during your period will cause heavy flow or make cramps worse"</p></div>
+      <div class="myth-truth"><div class="myth-truth-label">✅ The Truth</div><p>Warm baths can actually relieve cramps by relaxing uterine muscles. Hygiene is especially important during menstruation — bathing regularly is recommended.</p><div class="myth-source">Source: American College of OB/GYN</div></div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-myth"><div class="icon">🚫</div><p>"Irregular periods mean you are not able to have children"</p></div>
+      <div class="myth-truth"><div class="myth-truth-label">✅ The Truth</div><p>Irregular cycles can result from stress, weight changes, PCOS, or thyroid issues — many of which are treatable. Irregular periods alone don't equal infertility. See a gynecologist for proper assessment.</p><div class="myth-source">Source: ACOG, 2023</div></div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-myth"><div class="icon">🚫</div><p>"You cannot get pregnant during your period"</p></div>
+      <div class="myth-truth"><div class="myth-truth-label">✅ The Truth</div><p>While unlikely, pregnancy during menstruation is possible — especially for women with short cycles. Sperm can survive 5 days in the body. Contraception should be used consistently if avoiding pregnancy.</p><div class="myth-source">Source: Planned Parenthood</div></div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-myth"><div class="icon">🚫</div><p>"Drinking cold water will 'freeze' your blood and cause clots"</p></div>
+      <div class="myth-truth"><div class="myth-truth-label">✅ The Truth</div><p>Drinking cold water has no effect on menstrual flow or clotting. Small clots (smaller than a coin) during heavy flow are normal and result from uterine lining shedding — not temperature.</p><div class="myth-source">Source: NHS UK</div></div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-myth"><div class="icon">🚫</div><p>"Using tampons or menstrual cups means you are no longer a virgin"</p></div>
+      <div class="myth-truth"><div class="myth-truth-label">✅ The Truth</div><p>Virginity is not determined by whether a hymen is intact. The hymen naturally varies in shape and can stretch for many reasons. Tampon or cup use does not affect virginity.</p><div class="myth-source">Source: Planned Parenthood, UNFPA</div></div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-myth"><div class="icon">🚫</div><p>"Painful periods (dysmenorrhoea) are normal and every woman must endure them"</p></div>
+      <div class="myth-truth"><div class="myth-truth-label">✅ The Truth</div><p>Mild discomfort is common, but severe pain that disrupts daily life is not something you must endure. It can signal endometriosis, fibroids, or adenomyosis — all treatable conditions. Please see a doctor.</p><div class="myth-source">Source: Endometriosis UK, ACOG</div></div>
+    </div>
+    <div class="myth-card">
+      <div class="myth-myth"><div class="icon">🚫</div><p>"Eating 'hot' foods like pepper soup will increase your flow and be dangerous"</p></div>
+      <div class="myth-truth"><div class="myth-truth-label">✅ The Truth</div><p>Spicy foods don't increase menstrual flow. However, some women find spicy food worsens bloating or diarrhoea during their period — which is a gut sensitivity response, not flow-related.</p><div class="myth-source">Source: Journal of Women's Health</div></div>
+    </div>
+
+    <div style="height:8px;"></div>
+  </div>
+
+  <!-- ============================
+       SCREEN 7: COMMUNITY
+  ============================ -->
+  <div id="community" class="screen">
+    <div style="background:var(--grad3);">
+      <div class="screen-nav"><button class="back-btn" onclick="showScreen('more')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>Back</button><div class="screen-nav-title">Community 🫂</div></div>
+      <div class="screen-header" style="padding-top:4px;"><div class="screen-subtitle">You are not alone</div></div>
+    </div>
+    <div class="lang-toggle">
+      <div class="lang-btn active" onclick="toggleLang(this)">English</div>
+      <div class="lang-btn" onclick="toggleLang(this)">Yoruba</div>
+      <div class="lang-btn" onclick="toggleLang(this)">Igbo</div>
+      <div class="lang-btn" onclick="toggleLang(this)">Hausa</div>
+    </div>
+    <div class="comm-categories">
+      <div class="comm-cat active">All</div>
+      <div class="comm-cat">PCOS Sisters</div>
+      <div class="comm-cat">Endometriosis</div>
+      <div class="comm-cat">Faith & Fasting 🕌</div>
+      <div class="comm-cat">Fertility Journey</div>
+      <div class="comm-cat">Teen Health 👩🏾‍🏫</div>
+      <div class="comm-cat">Ask a Question</div>
+    </div>
+    <div class="post-card">
+      <div class="post-header">
+        <div class="post-avatar">A</div>
+        <div class="post-meta"><h4>Adaeze_OG</h4><span>Lagos · 2h ago</span></div>
+        <div class="post-badge">PCOS</div>
+      </div>
+      <div class="post-body">Abeg, does anyone else get really bad anxiety before their period? Like clockwork, 3 days before I just become a different person 😭 My doctor said it's PMDD — I didn't even know that was a thing!</div>
+      <div class="post-actions">
+        <div class="post-action"><span>❤️</span>42 hugs</div>
+        <div class="post-action"><span>💬</span>18 replies</div>
+        <div class="post-action"><span>🔖</span>Save</div>
+      </div>
+    </div>
+    <div class="post-card">
+      <div class="post-header">
+        <div class="post-avatar" style="background:linear-gradient(135deg,#7B4F6E,#C94B6B)">F</div>
+        <div class="post-meta"><h4>Fatimah_Abuja</h4><span>Abuja · 5h ago</span></div>
+        <div class="post-badge">Faith & Fasting</div>
+      </div>
+      <div class="post-body">Ramadan question — how do you ladies manage your period symptoms while fasting? My cramps are usually terrible and I can't take ibuprofen on empty stomach 🙏 Any advice?</div>
+      <div class="post-actions">
+        <div class="post-action"><span>❤️</span>87 hugs</div>
+        <div class="post-action"><span>💬</span>34 replies</div>
+        <div class="post-action"><span>🔖</span>Save</div>
+      </div>
+    </div>
+    <div class="post-card">
+      <div class="post-header">
+        <div class="post-avatar" style="background:linear-gradient(135deg,#f5a882,#e8728a)">N</div>
+        <div class="post-meta"><h4>Nkechi_PHC</h4><span>Port Harcourt · 1d ago</span></div>
+        <div class="post-meta"></div>
+      </div>
+      <div class="post-body">Update: after 2 years of being told "it's normal pain" — I finally got diagnosed with Stage 2 endometriosis 😤 Ladies, please advocate for yourselves at the hospital. Your pain is real. Don't let anyone dismiss you.</div>
+      <div class="post-actions">
+        <div class="post-action"><span>❤️</span>214 hugs</div>
+        <div class="post-action"><span>💬</span>61 replies</div>
+        <div class="post-action"><span>🔖</span>Save</div>
+      </div>
+    </div>
+    <div style="padding:0 16px 8px;"><button class="btn-primary">+ Share your story</button></div>
+  </div>
+
+  <!-- ============================
+       SCREEN 8: AUNTY TOMI
+  ============================ -->
+  <div id="tomi" class="screen">
+    <div class="tomi-header">
+      <button class="back-btn" style="color:white;margin-right:4px;" onclick="showScreen('home')"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <div class="tomi-big-avatar">💕</div>
+      <div class="tomi-header-text">
+        <h2>Tomi 💊</h2>
+        <p>Your cycle bestie · Pharmacology-trained</p>
+      </div>
+    </div>
+    <div class="tomi-disclaimer">
+      💡 <strong>Heads up:</strong> Tomi gives you health information and friendly guidance — she's not a replacement for your actual pharmacist or doctor. For clinical decisions, always see a licensed professional.
+    </div>
+    <div class="chat-area" id="chatArea">
+      <div class="chat-bubble tomi">
+        <div class="sender">Tomi 💕</div>
+        Hey gorgeous! 🌸 I'm Tomi — your cycle bestie. I'm here to help you understand your body, answer your period questions, and just be that knowledgeable friend you can ask anything. What's on your mind today?
+      </div>
+      <div class="chat-bubble user">
+        Why do I get so moody before my period?
+      </div>
+      <div class="chat-bubble tomi">
+        <div class="sender">Tomi 💕</div>
+        Oya, let me explain! 😊 In the luteal phase (days after ovulation), your oestrogen drops sharply and progesterone rises, then also falls before your period. These hormonal changes affect your serotonin — your "feel good" chemical — which can cause irritability, anxiety, or low mood.<br><br>This is called PMS. For some women it's very mild, for others it can be disruptive (PMDD). Regular exercise, reducing salt and caffeine, and getting enough sleep can help a lot. If it's severely affecting your daily life, please speak to your doctor — it's very treatable! 💕
+      </div>
+      <div class="ai-loading" id="aiLoading">
+        <div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div>
+      </div>
+    </div>
+    <div class="quick-replies">
+      <div class="qr-chip" onclick="sendQuick('What foods help with cramps?')">Foods for cramps?</div>
+      <div class="qr-chip" onclick="sendQuick('Is it safe to take ibuprofen every month?')">Ibuprofen monthly?</div>
+      <div class="qr-chip" onclick="sendQuick('What is PCOS and how do I know if I have it?')">What is PCOS?</div>
+      <div class="qr-chip" onclick="sendQuick('Why is my cycle irregular?')">Irregular cycle</div>
+      <div class="qr-chip" onclick="sendQuick('Can I exercise during my period?')">Exercise on period?</div>
+    </div>
+    <div class="chat-input-bar">
+      <input class="chat-input" type="text" placeholder="Ask Aunty Tomi anything..." id="chatInput" />
+      <button class="chat-send" onclick="sendChat()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ============================
+       SCREEN 9: INSIGHTS
+  ============================ -->
+  <div id="insights" class="screen">
+    <div class="insights-hero">
+      <div class="screen-nav" style="padding:0 0 12px;"><button class="back-btn" onclick="showScreen('home')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>Back</button></div>
+      <h2>Your Cycle Insights</h2>
+      <p>Based on 6 months of tracking</p>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="label">Avg Cycle Length</div><div class="value">28<span class="unit">days</span></div><div class="trend">↑ Consistent</div></div>
+      <div class="stat-card"><div class="label">Avg Period Length</div><div class="value">5<span class="unit">days</span></div><div class="trend">↓ Down from 6</div></div>
+      <div class="stat-card"><div class="label">Next Period</div><div class="value">16<span class="unit">days</span></div><div class="trend">Apr 3</div></div>
+      <div class="stat-card"><div class="label">Fertile Window</div><div class="value">5<span class="unit">days</span></div><div class="trend">Mar 15–19</div></div>
+    </div>
+    <div class="phase-bar-section" style="margin-top:16px;">
+      <h4>Your Cycle Phases</h4>
+      <div class="phase-bar">
+        <div class="phase-seg menstrual"></div>
+        <div class="phase-seg follicular"></div>
+        <div class="phase-seg ovulation"></div>
+        <div class="phase-seg luteal"></div>
+      </div>
+      <div class="phase-labels">
+        <div class="phase-label"><div class="phase-dot" style="background:var(--deep-rose)"></div>Menstrual (5d)</div>
+        <div class="phase-label"><div class="phase-dot" style="background:#f5a882)"></div>Follicular (7d)</div>
+        <div class="phase-label"><div class="phase-dot" style="background:#4ecb8f"></div>Ovulation (3d)</div>
+        <div class="phase-label"><div class="phase-dot" style="background:var(--plum)"></div>Luteal (13d)</div>
+      </div>
+    </div>
+    <div class="next-events" style="padding:16px 16px 0;">
+      <div class="section-label" style="padding:0;margin-bottom:10px;">Upcoming Events</div>
+      <div class="event-row">
+        <div class="event-icon fertile">🥚</div>
+        <div class="event-info"><h4>Fertile Window Opens</h4><p>March 15, 2026</p></div>
+        <div class="event-days">3<span>days</span></div>
+      </div>
+      <div class="event-row">
+        <div class="event-icon ov">🌟</div>
+        <div class="event-info"><h4>Predicted Ovulation</h4><p>March 17, 2026</p></div>
+        <div class="event-days">5<span>days</span></div>
+      </div>
+      <div class="event-row">
+        <div class="event-icon period">🩸</div>
+        <div class="event-info"><h4>Next Period</h4><p>April 3, 2026</p></div>
+        <div class="event-days">16<span>days</span></div>
+      </div>
+    </div>
+    <div style="height:8px;"></div>
+  </div>
+
+  <!-- ============================
+       SCREEN 10: PCOS/ENDO
+  ============================ -->
+  <div id="pcos" class="screen">
+    <div style="background:var(--grad3);">
+      <div class="screen-nav"><button class="back-btn" onclick="showScreen('more')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>Back</button><div class="screen-nav-title">PCOS & Endo</div></div>
+      <div class="screen-header" style="padding-top:4px;"><div class="screen-subtitle">Track, understand, advocate for yourself</div></div>
+    </div>
+    <div class="pcos-hero">
+      <h3>You deserve answers 💜</h3>
+      <p>PCOS affects 1 in 10 African women. Endometriosis affects 1 in 7. Both are commonly underdiagnosed. Track your symptoms to build a clinical picture for your doctor.</p>
+    </div>
+    <div class="section-label">Track Today</div>
+    <div class="symptom-tracker-grid">
+      <div class="sym-track-card"><div class="icon">🫄</div><h4>Pelvic Pain</h4><p>Location, intensity, timing</p><button class="log-btn">Log now</button></div>
+      <div class="sym-track-card"><div class="icon">🔵</div><h4>Bloating</h4><p>Severity today</p><button class="log-btn">Log now</button></div>
+      <div class="sym-track-card"><div class="icon">💤</div><h4>Fatigue</h4><p>Energy levels today</p><button class="log-btn">Log now</button></div>
+      <div class="sym-track-card"><div class="icon">🧠</div><h4>Brain Fog</h4><p>Concentration difficulty</p><button class="log-btn">Log now</button></div>
+      <div class="sym-track-card"><div class="icon">⚖️</div><h4>Weight Changes</h4><p>Log current weight</p><button class="log-btn">Log now</button></div>
+      <div class="sym-track-card"><div class="icon">🌡️</div><h4>Temp / BBT</h4><p>Basal body temperature</p><button class="log-btn">Log now</button></div>
+    </div>
+    <div class="pain-scale">
+      <h4>Pain level right now</h4>
+      <div class="pain-dots">
+        <div class="pain-dot selected" onclick="selectPain(this)">1</div>
+        <div class="pain-dot" onclick="selectPain(this)">2-3</div>
+        <div class="pain-dot" onclick="selectPain(this)">4-6</div>
+        <div class="pain-dot" onclick="selectPain(this)">7-8</div>
+        <div class="pain-dot" onclick="selectPain(this)">9-10</div>
+      </div>
+    </div>
+    <div class="see-doctor-banner">
+      <div class="icon">🏥</div>
+      <p><strong>When to see a doctor:</strong> If you have pain that stops your daily activities, very heavy periods (soaking a pad in under 2 hours), pain during sex, or bloating that lasts more than 2 weeks — please see a gynaecologist. Your pain deserves investigation.</p>
+    </div>
+    <div style="padding:0 16px 8px;"><button class="btn-primary">Export Symptom History for Doctor</button></div>
+  </div>
+
+  <!-- ============================
+       SCREEN 11: FERTILITY
+  ============================ -->
+  <div id="fertility" class="screen">
+    <div class="fertility-header">
+      <div class="screen-nav" style="padding:0 0 10px;"><button class="back-btn" onclick="showScreen('more')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>Back</button></div>
+      <h2>Fertility Mode 🌱</h2>
+      <p>Understanding your most fertile days</p>
+    </div>
+    <div class="fertile-window-card">
+      <h4>Your Fertile Window — March 2026</h4>
+      <div class="fertile-days">
+        <div class="fertile-day"><div class="day">13</div><div class="lbl">Mar</div></div>
+        <div class="fertile-day"><div class="day">14</div><div class="lbl">Mar</div></div>
+        <div class="fertile-day peak"><div class="day">15</div><div class="lbl">Peak ⭐</div></div>
+        <div class="fertile-day peak"><div class="day">16</div><div class="lbl">Peak ⭐</div></div>
+        <div class="fertile-day peak"><div class="day">17</div><div class="lbl">Ovul 🥚</div></div>
+        <div class="fertile-day"><div class="day">18</div><div class="lbl">Mar</div></div>
+        <div class="fertile-day"><div class="day">19</div><div class="lbl">Mar</div></div>
+      </div>
+    </div>
+    <div class="bbt-section" style="margin:16px 16px 0;">
+      <h4>Basal Body Temperature (°C)</h4>
+      <div class="bbt-chart">
+        <div class="bbt-baseline"></div>
+        <div class="bbt-bar" style="height:48%"></div>
+        <div class="bbt-bar" style="height:46%"></div>
+        <div class="bbt-bar" style="height:50%"></div>
+        <div class="bbt-bar" style="height:44%"></div>
+        <div class="bbt-bar" style="height:52%"></div>
+        <div class="bbt-bar" style="height:55%"></div>
+        <div class="bbt-bar peak" style="height:72%"></div>
+        <div class="bbt-bar peak" style="height:78%"></div>
+        <div class="bbt-bar peak" style="height:80%"></div>
+        <div class="bbt-bar" style="height:70%"></div>
+        <div class="bbt-bar" style="height:65%"></div>
+        <div class="bbt-bar" style="height:60%"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:10px;color:var(--text-light);">
+        <span>Mar 5</span><span>Mar 10</span><span>Mar 15</span><span>Mar 17</span>
+      </div>
+    </div>
+    <div class="fertility-tip" style="margin:16px 16px 0;">
+      <div class="icon">💡</div>
+      <p><strong>Tip:</strong> Track BBT every morning before getting up, at the same time. A temperature rise of 0.2°C above your baseline confirms ovulation has occurred. Use this alongside cervical mucus tracking for best results.</p>
+    </div>
+    <div style="margin:16px;"><button class="btn-primary">Log today's temperature</button></div>
+  </div>
+
+  <!-- ============================
+       SCREEN 12: EXPORT
+  ============================ -->
+  <div id="export" class="screen">
+    <div class="export-hero">
+      <div class="screen-nav" style="padding:0 0 10px;"><button class="back-btn" onclick="showScreen('more')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>Back</button></div>
+      <h2>Health Report</h2>
+      <p>Export your cycle data for your doctor or personal records</p>
+    </div>
+    <div class="report-preview" style="margin-top:-16px;">
+      <div class="report-header-strip">
+        <div>
+          <div class="report-logo">Arewa Report 🌸</div>
+          <div class="report-date">March 2026 · Chidera Okafor</div>
+        </div>
+      </div>
+      <div class="report-section">
+        <h4>Cycle Summary</h4>
+        <div class="report-row"><span>Average cycle length</span><strong>28 days</strong></div>
+        <div class="report-row"><span>Average period length</span><strong>5 days</strong></div>
+        <div class="report-row"><span>Cycles tracked</span><strong>6 cycles</strong></div>
+        <div class="report-row"><span>Last period start</span><strong>Feb 28, 2026</strong></div>
+      </div>
+      <div class="report-section">
+        <h4>Symptoms (Most Frequent)</h4>
+        <div class="report-row"><span>Cramps (Dysmenorrhoea)</span><strong>High frequency</strong></div>
+        <div class="report-row"><span>Bloating</span><strong>Moderate</strong></div>
+        <div class="report-row"><span>Mood changes (PMS)</span><strong>Moderate</strong></div>
+        <div class="report-row"><span>Fatigue</span><strong>Mild</strong></div>
+      </div>
+      <div class="report-section">
+        <h4>Conditions Flagged</h4>
+        <div class="report-row"><span>PCOS indicators logged</span><strong>Yes — see tracker</strong></div>
+        <div class="report-row"><span>Average pain score</span><strong>4/10</strong></div>
+      </div>
+    </div>
+    <div class="section-label" style="margin-top:16px;">Export Options</div>
+    <div class="export-options">
+      <div class="export-btn"><div class="icon">📄</div><div class="info"><h4>Export as PDF</h4><p>Clinical format — share with your doctor</p></div><div class="arrow">→</div></div>
+      <div class="export-btn"><div class="icon">📊</div><div class="info"><h4>Export as CSV</h4><p>Spreadsheet format for personal analysis</p></div><div class="arrow">→</div></div>
+      <div class="export-btn"><div class="icon">📧</div><div class="info"><h4>Email to Doctor</h4><p>Send directly from the app</p></div><div class="arrow">→</div></div>
+      <div class="export-btn"><div class="icon">📱</div><div class="info"><h4>Share via WhatsApp</h4><p>Send to a trusted person or telemedicine</p></div><div class="arrow">→</div></div>
+    </div>
+    <div style="height:16px;"></div>
+  </div>
+
+  <!-- ============================
+       SCREEN 13: OFFLINE MODE
+  ============================ -->
+  <div id="offline" class="screen">
+    <div style="background:var(--grad3);">
+      <div class="screen-nav"><button class="back-btn" onclick="showScreen('more')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>Back</button><div class="screen-nav-title">Offline Mode 📶</div></div>
+      <div class="screen-header" style="padding-top:4px;"><div class="screen-subtitle">Arewa works without internet</div></div>
+    </div>
+    <div class="offline-indicator">
+      <div class="icon">📶</div>
+      <p>You are currently <strong>online</strong>. Arewa stores your core features locally so you can track your cycle even without data or Wi-Fi.</p>
+    </div>
+    <div class="offline-features">
+      <h4>What works offline?</h4>
+      <div class="offline-feature-row"><div class="icon">📅</div><div class="info"><h4>Cycle Calendar</h4><p>View and log period dates</p></div><div class="status available">✓ Available</div></div>
+      <div class="offline-feature-row"><div class="icon">😊</div><div class="info"><h4>Symptom & Mood Log</h4><p>Track how you feel daily</p></div><div class="status available">✓ Available</div></div>
+      <div class="offline-feature-row"><div class="icon">💥</div><div class="info"><h4>Myth-Buster Library</h4><p>All 38 myths stored locally</p></div><div class="status available">✓ Available</div></div>
+      <div class="offline-feature-row"><div class="icon">🥗</div><div class="info"><h4>Nutrition Guide</h4><p>African foods by country</p></div><div class="status available">✓ Available</div></div>
+      <div class="offline-feature-row"><div class="icon">📊</div><div class="info"><h4>Period Insights</h4><p>Based on locally stored data</p></div><div class="status available">✓ Available</div></div>
+      <div class="offline-feature-row"><div class="icon">💕</div><div class="info"><h4>Tomi AI</h4><p>Requires internet connection</p></div><div class="status online-only">Online only</div></div>
+      <div class="offline-feature-row"><div class="icon">🫂</div><div class="info"><h4>Community</h4><p>Requires internet connection</p></div><div class="status online-only">Online only</div></div>
+    </div>
+    <button class="sync-btn">🔄 Sync data now</button>
+    <div style="height:16px;"></div>
+  </div>
+
+  <!-- ============================
+       SCREEN 14: SETTINGS
+  ============================ -->
+  <div id="settings" class="screen">
+    <div class="settings-profile">
+      <button class="back-btn" style="color:var(--text-dark);margin-right:4px;flex-shrink:0;" onclick="showScreen('more')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg></button>
+      <div class="profile-avatar">C</div>
+      <div class="profile-info">
+        <h3>Chidera Okafor</h3>
+        <p>Tracking since October 2025 · 6 cycles</p>
+      </div>
+    </div>
+    <div style="height:8px;"></div>
+
+    <div class="settings-section">
+      <h4>Language & Region</h4>
+      <div class="setting-row"><div class="icon">🌍</div><div class="info"><h4>Language</h4><p>App language</p></div><div class="right"><div class="select-row">English</div></div></div>
+      <div class="setting-row"><div class="icon">🕌</div><div class="info"><h4>Ramadan Mode</h4><p>Adjusts fasting-safe advice</p></div><div class="right"><div class="toggle" onclick="toggleToggle(this)"></div></div></div>
+    </div>
+
+    <div class="settings-section">
+      <h4>Reminders</h4>
+      <div class="setting-row"><div class="icon">🩸</div><div class="info"><h4>Period Reminder</h4><p>2 days before predicted</p></div><div class="right"><div class="toggle on" onclick="toggleToggle(this)"></div></div></div>
+      <div class="setting-row"><div class="icon">💊</div><div class="info"><h4>Daily Log Reminder</h4><p>8:00 PM every evening</p></div><div class="right"><div class="toggle on" onclick="toggleToggle(this)"></div></div></div>
+      <div class="setting-row"><div class="icon">🥚</div><div class="info"><h4>Fertile Window Alert</h4><p>Notification at start of window</p></div><div class="right"><div class="toggle" onclick="toggleToggle(this)"></div></div></div>
+      <div class="setting-row"><div class="icon">💧</div><div class="info"><h4>Water Reminder</h4><p>Every 2 hours</p></div><div class="right"><div class="toggle on" onclick="toggleToggle(this)"></div></div></div>
+    </div>
+
+    <div class="settings-section">
+      <h4>Health Tracking</h4>
+      <div class="setting-row"><div class="icon">😴</div><div class="info"><h4>Sleep Tracker</h4><p>Connect to sleep data</p></div><div class="right"><div class="toggle" onclick="toggleToggle(this)"></div></div></div>
+      <div class="setting-row"><div class="icon">🏃🏾‍♀️</div><div class="info"><h4>Exercise Log</h4><p>Track activity by phase</p></div><div class="right"><div class="toggle on" onclick="toggleToggle(this)"></div></div></div>
+      <div class="setting-row"><div class="icon">🌡️</div><div class="info"><h4>BBT Tracking</h4><p>Basal body temperature</p></div><div class="right"><div class="toggle on" onclick="toggleToggle(this)"></div></div></div>
+      <div class="setting-row"><div class="icon">🧴</div><div class="info"><h4>Skin Tracker</h4><p>Log acne and skin changes</p></div><div class="right"><div class="toggle" onclick="toggleToggle(this)"></div></div></div>
+    </div>
+
+    <div class="settings-section">
+      <h4>Privacy & Accessibility</h4>
+      <div class="setting-row"><div class="icon">🔒</div><div class="info"><h4>Discreet Mode</h4><p>App appears as "Health Planner"</p></div><div class="right"><div class="toggle" onclick="toggleToggle(this)"></div></div></div>
+      <div class="setting-row"><div class="icon">👨‍👩‍👧</div><div class="info"><h4>Partner View</h4><p>Share cycle info with partner</p></div><div class="right"><div class="toggle" onclick="toggleToggle(this)"></div></div></div>
+      <div class="setting-row"><div class="icon">🎒</div><div class="info"><h4>School Mode</h4><p>Simplified view for ages 10–17</p></div><div class="right"><div class="toggle" onclick="toggleToggle(this)"></div></div></div>
+      <div class="setting-row"><div class="icon">📱</div><div class="info"><h4>Export My Data</h4><p>Download all your health records</p></div><div class="right">→</div></div>
+    </div>
+    <div style="height:8px;"></div>
+  </div>
+
+  <!-- ============================
+       SCREEN: MORE MENU
+  ============================ -->
+  <div id="more" class="screen">
+    <div class="screen-header" style="background:var(--grad3);">
+      <div class="screen-title">Arewa 🌸</div>
+      <div class="screen-subtitle">Beautiful woman. Know your body. 🌸</div>
+    </div>
+
+    <!-- Profile strip -->
+    <div style="display:flex;align-items:center;gap:14px;margin:0 16px 20px;background:white;border-radius:18px;padding:14px 16px;box-shadow:var(--shadow-card);">
+      <div style="width:48px;height:48px;background:var(--grad1);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;color:white;font-weight:700;flex-shrink:0;">C</div>
+      <div>
+        <div style="font-size:15px;font-weight:700;color:var(--text-dark);">Chidera Okafor</div>
+        <div style="font-size:12px;color:var(--text-light);">Day 12 · Follicular Phase</div>
+      </div>
+      <div style="margin-left:auto;cursor:pointer;font-size:20px;" onclick="showScreen('settings')">⚙️</div>
+    </div>
+
+    <!-- Section: Track -->
+    <div style="padding:0 16px 10px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--text-light);margin-bottom:10px;">Track & Log</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div onclick="showScreen('tracker')" style="background:white;border-radius:16px;padding:16px;box-shadow:var(--shadow-card);cursor:pointer;display:flex;flex-direction:column;gap:6px;">
+          <div style="font-size:28px;">😊</div>
+          <div style="font-size:13px;font-weight:700;color:var(--text-dark);">Symptom Tracker</div>
+          <div style="font-size:11px;color:var(--text-light);">Mood, flow, symptoms</div>
+        </div>
+        <div onclick="showScreen('nutrition')" style="background:white;border-radius:16px;padding:16px;box-shadow:var(--shadow-card);cursor:pointer;display:flex;flex-direction:column;gap:6px;">
+          <div style="font-size:28px;">🥗</div>
+          <div style="font-size:13px;font-weight:700;color:var(--text-dark);">Nutrition for Flow</div>
+          <div style="font-size:11px;color:var(--text-light);">African foods by phase</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section: Health -->
+    <div style="padding:0 16px 10px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--text-light);margin-bottom:10px;">Health</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div onclick="showScreen('pcos')" style="background:white;border-radius:16px;padding:16px;box-shadow:var(--shadow-card);cursor:pointer;display:flex;flex-direction:column;gap:6px;">
+          <div style="font-size:28px;">🩺</div>
+          <div style="font-size:13px;font-weight:700;color:var(--text-dark);">PCOS & Endo</div>
+          <div style="font-size:11px;color:var(--text-light);">Track & understand</div>
+        </div>
+        <div onclick="showScreen('fertility')" style="background:white;border-radius:16px;padding:16px;box-shadow:var(--shadow-card);cursor:pointer;display:flex;flex-direction:column;gap:6px;">
+          <div style="font-size:28px;">🌱</div>
+          <div style="font-size:13px;font-weight:700;color:var(--text-dark);">Fertility Mode</div>
+          <div style="font-size:11px;color:var(--text-light);">Fertile window & BBT</div>
+        </div>
+        <div onclick="showScreen('myths')" style="background:white;border-radius:16px;padding:16px;box-shadow:var(--shadow-card);cursor:pointer;display:flex;flex-direction:column;gap:6px;">
+          <div style="font-size:28px;">💥</div>
+          <div style="font-size:13px;font-weight:700;color:var(--text-dark);">Myth-Buster</div>
+          <div style="font-size:11px;color:var(--text-light);">38 myths debunked</div>
+        </div>
+        <div onclick="showScreen('community')" style="background:white;border-radius:16px;padding:16px;box-shadow:var(--shadow-card);cursor:pointer;display:flex;flex-direction:column;gap:6px;">
+          <div style="font-size:28px;">🫂</div>
+          <div style="font-size:13px;font-weight:700;color:var(--text-dark);">Community</div>
+          <div style="font-size:11px;color:var(--text-light);">Stories & support</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section: Data & App -->
+    <div style="padding:0 16px 10px;">
+      <div style="font-size:11px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--text-light);margin-bottom:10px;">Data & App</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div onclick="showScreen('export')" style="background:white;border-radius:16px;padding:16px;box-shadow:var(--shadow-card);cursor:pointer;display:flex;flex-direction:column;gap:6px;">
+          <div style="font-size:28px;">📄</div>
+          <div style="font-size:13px;font-weight:700;color:var(--text-dark);">Export Report</div>
+          <div style="font-size:11px;color:var(--text-light);">PDF for your doctor</div>
+        </div>
+        <div onclick="showScreen('offline')" style="background:white;border-radius:16px;padding:16px;box-shadow:var(--shadow-card);cursor:pointer;display:flex;flex-direction:column;gap:6px;">
+          <div style="font-size:28px;">📶</div>
+          <div style="font-size:13px;font-weight:700;color:var(--text-dark);">Offline Mode</div>
+          <div style="font-size:11px;color:var(--text-light);">Works without data</div>
+        </div>
+        <div onclick="showScreen('settings')" style="background:white;border-radius:16px;padding:16px;box-shadow:var(--shadow-card);cursor:pointer;display:flex;flex-direction:column;gap:6px;">
+          <div style="font-size:28px;">⚙️</div>
+          <div style="font-size:13px;font-weight:700;color:var(--text-dark);">Settings</div>
+          <div style="font-size:11px;color:var(--text-light);">Preferences & privacy</div>
+        </div>
+      </div>
+    </div>
+    <div style="height:8px;"></div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottom-nav" id="bottomNav">
+    <div class="nav-item active" onclick="showScreen('home')">
+      <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <span>Home</span>
+    </div>
+    <div class="nav-item" onclick="showScreen('calendar')">
+      <svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span>Calendar</span>
+    </div>
+    <div class="nav-item" onclick="showScreen('tomi')">
+      <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20v-1a8 8 0 0116 0v1"/></svg>
+      <span>Tomi 💕</span>
+    </div>
+    <div class="nav-item" onclick="showScreen('insights')">
+      <svg class="nav-icon" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      <span>Insights</span>
+    </div>
+    <div class="nav-item" onclick="showScreen('more')">
+      <svg class="nav-icon" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.5" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.5" fill="currentColor" stroke="none"/></svg>
+      <span>More</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// ---- SCREEN NAVIGATION ----
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  // Update nav
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  const navMap = { home: 0, calendar: 1, tomi: 2, insights: 3, more: 4, settings: 4, tracker: 4, nutrition: 4, myths: 4, community: 4, pcos: 4, fertility: 4, export: 4, offline: 4 };
+  if (navMap[id] !== undefined) {
+    document.querySelectorAll('.nav-item')[navMap[id]].classList.add('active');
+  }
+  // Hide bottom nav only on onboarding
+  document.getElementById('bottomNav').style.display = id === 'onboarding' ? 'none' : 'flex';
+  // Scroll to top
+  document.getElementById(id).scrollTop = 0;
+}
+
+// ---- ONBOARDING ----
+let currentStep = 1;
+function nextStep() {
+  if (currentStep === 3) {
+    showScreen('home');
+    return;
+  }
+  document.getElementById('step' + currentStep).classList.remove('active');
+  document.getElementById('dot' + currentStep).classList.remove('active');
+  currentStep++;
+  document.getElementById('step' + currentStep).classList.add('active');
+  document.getElementById('dot' + currentStep).classList.add('active');
+  if (currentStep === 3) {
+    document.getElementById('nextBtn').textContent = 'Get Started 🌸';
+  }
+}
+
+function selectChip(el, group) {
+  el.closest('.option-chips').querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+// ---- TOGGLES ----
+function toggleMood(el) { el.classList.toggle('selected'); }
+function toggleChip(el) { el.classList.toggle('active'); }
+function toggleHerbal(el) { el.style.background = el.style.background === 'var(--grad1)' ? '' : 'var(--grad1)'; el.style.color = el.style.color === 'white' ? '' : 'white'; }
+function toggleLang(el) {
+  el.closest('.lang-toggle').querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+}
+function selectTab(el) {
+  el.closest('.phase-tabs').querySelectorAll('.phase-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+function selectFlow(el) {
+  el.closest('.flow-dots').querySelectorAll('.flow-dot').forEach(d => d.classList.remove('active'));
+  el.classList.add('active');
+}
+function selectPain(el) {
+  el.closest('.pain-dots').querySelectorAll('.pain-dot').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function toggleToggle(el) { el.classList.toggle('on'); }
+
+// ---- AUNTY TOMI AI CHAT ----
+const SYSTEM_PROMPT = `You are Tomi — a warm, girly, knowledgeable cycle bestie in a Nigerian digital health app called Arewa. You were named after the pharmacology graduate who created Arewa.
+
+Your personality:
+- You are a girl's girl — warm, fun, supportive, like a smart best friend who happens to know pharmacology
+- Speak in a modern, friendly, feminine tone — NOT like a stern aunty or a clinical professional
+- You can say things like "okay so here's the thing", "honestly", "lowkey", "girl yes" naturally but not excessively — keep it natural
+- You are NOT a replacement for a pharmacist or doctor — gently remind users of this when giving health advice
+- You speak with clinical accuracy because you are grounded in pharmacology knowledge
+- You are empathetic, non-judgmental, and normalising about menstrual health topics
+- You debunk myths warmly but clearly
+- You are especially aware of conditions underdiagnosed in African women: PCOS, endometriosis, fibroids, anaemia
+- Keep responses concise and warm — 2-4 short paragraphs maximum
+- Always end health advice with a gentle reminder to consult a pharmacist or doctor for clinical decisions
+- Do NOT use "Aunty", "sis", or overly Nigerian dialect — your tone is modern, warm, and girlish`;
+
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const msg = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  appendBubble(msg, 'user');
+  await askTomi(msg);
+}
+
+async function sendQuick(msg) {
+  appendBubble(msg, 'user');
+  await askTomi(msg);
+}
+
+function appendBubble(text, who) {
+  const chatArea = document.getElementById('chatArea');
+  const div = document.createElement('div');
+  div.className = 'chat-bubble ' + who;
+  if (who === 'tomi') {
+    div.innerHTML = '<div class="sender">Tomi 💕</div>' + text;
+  } else {
+    div.textContent = text;
+  }
+  chatArea.appendChild(div);
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+async function askTomi(msg) {
+  const loading = document.getElementById('aiLoading');
+  loading.classList.add('show');
+  document.getElementById('chatArea').scrollTop = document.getElementById('chatArea').scrollHeight;
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: SYSTEM_PROMPT,
+        messages: [{ role: 'user', content: msg }]
+      })
+    });
+    const data = await res.json();
+    const reply = data.content && data.content[0] ? data.content[0].text : "Ehh ya, I'm having a little trouble right now. Please try again in a moment! 💕";
+    loading.classList.remove('show');
+    appendBubble(reply.replace(/\n\n/g, '<br><br>').replace(/\n/g, '<br>'), 'tomi');
+  } catch(e) {
+    loading.classList.remove('show');
+    appendBubble("No worry — I had a small connection issue. Please check your internet and try again! 💕", 'tomi');
+  }
+  document.getElementById('chatArea').scrollTop = document.getElementById('chatArea').scrollHeight;
+}
+
+// Chat on Enter
+document.getElementById('chatInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter') sendChat();
+});
+
+// Init
+showScreen('onboarding');
+document.getElementById('bottomNav').style.display = 'none';
+</script>
+</body>
+</html>
