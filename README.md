@@ -6,7 +6,7 @@
 
 Arewa is a pan-African women's cycle and wellness app designed specifically for African women — honouring our foods, our languages, our conditions, and our stories. Built by a Nigerian pharmacology graduate. Powered by real science.
 
-🔗 **Live app:** [https://tomeehstar.github.io/arewa](https://tomeehstar.github.io/arewa)
+🔗 **Live app:** [https://tomeehstar.github.io/Arewa/Arewa.html](https://tomeehstar.github.io/Arewa/Arewa.html)
 
 ---
 
@@ -104,6 +104,17 @@ Arewa was built to close that gap — starting with a prototype, growing into a 
 
 ---
 
+## File Structure
+
+```
+Arewa/
+  Arewa.html        ← main app file
+  index.html        ← redirects to Arewa.html for GitHub Pages
+  README.md         ← this file
+```
+
+---
+
 ## Screens Preview
 
 ```
@@ -123,7 +134,7 @@ Fertility → Export → Offline → Settings → More Menu
 Transitioning into Digital Health & Health Informatics. Self-taught in UX design and front-end development. Holder of IBM AI in Healthcare badge. Builder of African digital health tools.
 
 - 🌿 [HerbGuard Nigeria](https://tomeehstar.github.io/herbguard/) — herbal medicine safety verification platform
-- 🌸 [Arewa](https://tomeehstar.github.io/arewa/) — African women's cycle and wellness app
+- 🌸 [Arewa](https://tomeehstar.github.io/Arewa/Arewa.html) — African women's cycle and wellness app
 
 ---
 
